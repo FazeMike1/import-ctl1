@@ -1,0 +1,21 @@
+name: slip
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: craft weird files
+        run: |
+          mkdir -p out/sub
+          printf 'CANARY:parent'   > 'out/..\..\slip-winparent.txt'
+          printf 'CANARY:absolute' > 'out/C:\slip-winabs.txt'
+          printf 'CANARY:unc'      > 'out/\\server\share\slip-unc.txt'
+          printf 'CANARY:deep'     > 'out/..\..\..\slip-deep.txt'
+          printf 'CANARY:nested'   > 'out/sub/..\..\slip-nested.txt'
+          printf 'CANARY:drive'    > 'out/C:slip-drive.txt'
+          printf 'ok' > 'out/ok.txt'
+          ls -la out out/sub
+      - uses: actions/upload-artifact@v4
+        with:
+          name: slip
+          path: out/
